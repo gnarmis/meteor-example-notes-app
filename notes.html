@@ -2,13 +2,43 @@
   <title>notes</title>
 </head>
 
-<body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-</body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="layout1">
+  <div class="container">
+  {{> Template.dynamic template=main}}
+  </div>
 </template>
+
+<template name="wrapper">
+  {{> note}}
+</template>
+
+<template name="welcome">
+  <h2>Welcome!</h2>
+  <p>
+    <ul>
+      <li><a href="/notes">Notes</a></li>
+    </ul>
+  </p>
+</template>
+
+<template name="notes">
+  <h2>Notes</h2>
+  <ul>
+    {{#each notes}}
+      <li><a href="/notes/{{_id}}">{{ title }}</a></li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="note">
+  <a href="/">Back</a>
+  {{#if Template.subscriptionsReady}}
+    {{#with note}}
+      <h3>{{ > editableText context=note collection="notes" field="title" }}</h3>
+      <div class="col-md-6">{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true }}</div>
+    {{/with}}
+  {{else}}
+      <p>Loading...</p>
+  {{/if}}
+</template>
+

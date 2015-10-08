@@ -1,17 +1,44 @@
-if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0)
+Notes = new Meteor.Collection('notes')
 
-  Template.hello.helpers({
-    counter() {
-      return Session.get('counter')
+FlowRouter.route('/', {
+  action() {
+    BlazeLayout.render('layout1', { main: 'notes' })
+  }
+})
+
+FlowRouter.route('/notes', {
+  action() {
+    BlazeLayout.render('layout1', { main: 'notes' })
+  }
+})
+
+FlowRouter.route('/notes/:noteId', {
+  action() {
+    BlazeLayout.render('layout1', { main: 'note' })
+  }
+})
+
+
+if (Meteor.isClient) {
+  Template.notes.helpers({
+    notes() {
+      return Notes.find({})
     }
   })
 
-  Template.hello.events({
-    'click button': () => {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1)
+  Template.note.onCreated(function() {
+    var self = this;
+    self.autorun(function() {
+      var noteId = FlowRouter.getParam('noteId');
+      self.subscribe('singleNote', noteId);
+    });
+  })
+
+  Template.note.helpers({
+    note: () => {
+      let noteId = FlowRouter.getParam('noteId')
+      let note = Notes.findOne({_id: noteId}) || {}
+      return note
     }
   })
 }

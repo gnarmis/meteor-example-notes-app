@@ -21,13 +21,18 @@ insecure                # Allow all DB writes from clients (for prototyping)
 
 kadira:flow-router
 kadira:blaze-layout
-twbs:bootstrap
+fortawesome:fontawesome
+twbs:bootstrap-noglyph
 less
 sanjo:jasmine
 velocity:html-reporter
+underscore
 
 accounts-password
 ian:accounts-ui-bootstrap-3
 
 # simplifying my life a bit
 dburles:collection-helpers
+
+# simple text editor functionality
+babrahams:editable-text-wysiwyg-bootstrap-3
