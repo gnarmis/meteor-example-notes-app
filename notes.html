@@ -23,6 +23,7 @@
 
 <template name="notes">
   <h2>Notes</h2>
+  <p><a href="#" class="btn btn-primary new-note">New Note</a></p>
   <ul>
     {{#each notes}}
       <li><a href="/notes/{{_id}}">{{ title }}</a></li>
@@ -35,7 +36,7 @@
   {{#if Template.subscriptionsReady}}
     {{#with note}}
       <h3>{{ > editableText context=note collection="notes" field="title" }}</h3>
-      <div class="col-md-6">{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true }}</div>
+      <div class="col-md-6">{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true acceptEmpty=true substitute='<i class="fa fa-pencil"></i>' }}</div>
     {{/with}}
   {{else}}
       <p>Loading...</p>

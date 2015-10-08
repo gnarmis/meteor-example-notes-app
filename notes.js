@@ -25,6 +25,13 @@ if (Meteor.isClient) {
       return Notes.find({})
     }
   })
+  Template.notes.events({
+    'click .new-note': (event, template) => {
+      let noteId = Notes.insert({title: "Untitled", content: "", createdAt: new Date()})
+      FlowRouter.go('/notes/' + noteId)
+    }
+  })
+
 
   Template.note.onCreated(function() {
     var self = this;
