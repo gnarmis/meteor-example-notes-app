@@ -8,19 +8,6 @@
   </div>
 </template>
 
-<template name="wrapper">
-  {{> note}}
-</template>
-
-<template name="welcome">
-  <h2>Welcome!</h2>
-  <p>
-    <ul>
-      <li><a href="/notes">Notes</a></li>
-    </ul>
-  </p>
-</template>
-
 <template name="notes">
   <div class="col-md-6">
   <a href="#" class="btn btn-primary new-note">New Note</a>
@@ -51,10 +38,8 @@
   <a href="/" class="btn btn-default">All Notes</a>
   {{#if Template.subscriptionsReady}}
     {{#with note}}
-
       <h2>{{ > editableText context=note collection="notes" field="title" }}</h2>
-      <div>{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true acceptEmpty=true substitute='<i class="fa fa-pencil"></i>' }}</div>
-
+      <div class="note-content">{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true acceptEmpty=true substitute='Click here to start writing...' }}</div>
     {{/with}}
   {{else}}
       <p>Loading...</p>
