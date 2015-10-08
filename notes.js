@@ -20,6 +20,13 @@ FlowRouter.route('/notes/:noteId', {
 
 
 if (Meteor.isClient) {
+  Template.notes.onCreated(function() {
+    var self = this;
+    self.autorun(function() {
+      self.subscribe('allNotes');
+    });
+  })
+
   Template.notes.helpers({
     notes() {
       return Notes.find({})
@@ -27,8 +34,14 @@ if (Meteor.isClient) {
   })
   Template.notes.events({
     'click .new-note': (event, template) => {
-      let noteId = Notes.insert({title: "Untitled", content: "", createdAt: new Date()})
-      FlowRouter.go('/notes/' + noteId)
+      Meteor.call('createBlankNote', function (err, res) {
+        if (err) {
+          console.log(err)
+        } else {
+          FlowRouter.go('/notes/' + res)
+        }
+      });
+
     },
     'click .delete-note': (event, template) => {
       event.preventDefault()
@@ -39,7 +52,7 @@ if (Meteor.isClient) {
         if (result) {
           // User confirmed it, so go do something.
           var noteId = event.target.getAttribute('href')
-          Notes.remove({_id: noteId})
+          Meteor.call('deleteNote', noteId)
         } else {
           // User did not confirm, do nothing.
         }
@@ -47,7 +60,6 @@ if (Meteor.isClient) {
 
     }
   })
-
 
   Template.note.onCreated(function() {
     var self = this;
@@ -67,6 +79,25 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+  Meteor.publish('allNotes', function() {
+    return Notes.find({})
+  })
+
+  Meteor.publish('singleNote', function(id) {
+    return Notes.find({_id: id});
+  })
+
+  Meteor.methods({
+    createBlankNote: function() {
+      var noteId = Notes.insert({title: "Untitled", content: "", createdAt: new Date()})
+      return noteId
+    },
+    deleteNote: function(noteId) {
+      Notes.remove({_id: noteId})
+      return true
+    }
+  })
+
   var destroy = function() {
     Notes.remove({});
     Meteor.setTimeout(function() {

@@ -3,7 +3,7 @@
 </head>
 
 <template name="layout1">
-  <div class="container">
+  <div class="container main-wrapper">
   {{> Template.dynamic template=main}}
   </div>
 </template>
@@ -22,33 +22,43 @@
 </template>
 
 <template name="notes">
+  <div class="col-md-6">
+  <a href="#" class="btn btn-primary new-note">New Note</a>
   <h2>Notes</h2>
-  <p><a href="#" class="btn btn-primary new-note">New Note</a></p>
   <table class="table">
     <thead>
       <th>Name</th><th>Created At</th><th></th>
     </thead>
     <tbody>
-    {{#each notes}}
-      <tr>
-        <td><a href="/notes/{{_id}}">{{ title }}</a></td>
-        <td>{{ createdAt }}</td>
-        <td><a href="{{_id}}" class="btn btn-danger delete-note">Delete</a></td>
-      </tr>
-    {{/each}}
+    {{#if Template.subscriptionsReady}}
+      {{#each notes}}
+        <tr>
+          <td><a href="/notes/{{_id}}">{{ title }}</a></td>
+          <td>{{ createdAt }}</td>
+          <td><a href="{{_id}}" class="btn btn-danger delete-note">Delete</a></td>
+        </tr>
+      {{/each}}
+    {{else}}
+      <p>Loading...</p>
+    {{/if}}
     </tbody>
   </table>
+  </div>
 </template>
 
 <template name="note">
-  <a href="/">Back</a>
+  <div class="col-md-6 note">
+  <a href="/" class="btn btn-default">All Notes</a>
   {{#if Template.subscriptionsReady}}
     {{#with note}}
-      <h3>{{ > editableText context=note collection="notes" field="title" }}</h3>
-      <div class="col-md-6">{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true acceptEmpty=true substitute='<i class="fa fa-pencil"></i>' }}</div>
+
+      <h2>{{ > editableText context=note collection="notes" field="title" }}</h2>
+      <div>{{ > editableText context=note collection="notes" field="content" inputClass="note-body-wysiwyg" textarea=true wysiwyg=true acceptEmpty=true substitute='<i class="fa fa-pencil"></i>' }}</div>
+
     {{/with}}
   {{else}}
       <p>Loading...</p>
   {{/if}}
+  </div>
 </template>
 
