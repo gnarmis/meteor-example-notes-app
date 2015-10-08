@@ -29,6 +29,22 @@ if (Meteor.isClient) {
     'click .new-note': (event, template) => {
       let noteId = Notes.insert({title: "Untitled", content: "", createdAt: new Date()})
       FlowRouter.go('/notes/' + noteId)
+    },
+    'click .delete-note': (event, template) => {
+      event.preventDefault()
+      BootstrapModalPrompt.prompt({
+        title: "Delete Note?",
+        content: "Do you really want to delete this note forever?"
+      }, function(result) {
+        if (result) {
+          // User confirmed it, so go do something.
+          var noteId = event.target.getAttribute('href')
+          Notes.remove({_id: noteId})
+        } else {
+          // User did not confirm, do nothing.
+        }
+      });
+
     }
   })
 
@@ -51,6 +67,13 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+  var destroy = function() {
+    Notes.remove({});
+    Meteor.setTimeout(function() {
+      destroy();
+    }, 15 * 60 * 1000);
+  }
+
   Meteor.startup(() => {
     // code to run on server at startup
   })

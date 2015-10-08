@@ -36,3 +36,5 @@ dburles:collection-helpers
 
 # simple text editor functionality
 babrahams:editable-text-wysiwyg-bootstrap-3
+
+theduke:bootstrap-modal-prompt
